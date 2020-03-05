@@ -22,10 +22,25 @@ P1 <- read_excel("NIH P1 Emotion Understanding SDS300.xlsx")
 
 #Clean Data
 ```{r}
-names(NIH_P1_Emotion_Understanding_SDS300)<-str_replace_all(names(NIH_P1_Emotion_Understanding_SDS300), c(" " = "" )) 
+names(P1)<-str_replace_all(names(P1), c(" " = "" )) 
+P1<- P1 %>%
+  mutate(IGroup = as.factor(IGroup))
+view(P1)
+```
+
+```{r}
+library("Hmisc")
+
+corP1 <- P1 %>%
+  select(-ETHNICITY,-child_ID, -Gender, -Intervention, -IGroup)
+
+
+mcor<-round(cor(corP1),2)
+corP1 <- rcorr(as.matrix(corP1))
 ```
 
 ```{r}
 
+cor.plot(corP1$r)
 ```
 
