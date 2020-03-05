@@ -4,8 +4,24 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+#Load Package
+```{r}
 library(readxl)
-NIH_P1_Emotion_Understanding_SDS300 <- read_excel("NIH P1 Emotion Understanding SDS300.xlsx")
+library(tidyverse)
+library(lavaan)
+library(psych)
+```
+
+#loading Dataset
+```{r}
+P1 <- read_excel("NIH P1 Emotion Understanding SDS300.xlsx")
+```
+
+#Clean Data
+```{r}
+names(NIH_P1_Emotion_Understanding_SDS300)<-str_replace_all(names(NIH_P1_Emotion_Understanding_SDS300), c(" " = "" )) 
 ```
 
