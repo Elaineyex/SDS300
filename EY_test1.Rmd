@@ -70,3 +70,31 @@ summary(fit_2, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE)
 semPaths(fit_2,rotation=2)
 ```
 
+
+```{r}
+#look at intervention 
+#cross-lagged full model 
+P1 <- P1 %>%
+  mutate(Intervention = as.factor(Intervention))
+
+model_3 <- "PLS4compraw3 ~  Intervention + AGE3 + WordSpan
+          EOWPVTraw3 ~ Intervention + AGE3 + WordSpan
+          EMOtotal3 ~  Intervention + AGE3 + WordSpan"
+fit_3 = sem(model_3, data = P1)
+summary(fit_3, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE)
+
+```
+
+Regression
+```{r}
+ggplot(data = P1, aes(x=EMOtotal3)) + geom_histogram()
+
+model_a <- lm(EMOtotal3 ~ AGE3, data = P1)
+summary(model_a)
+model_b <- lm(EMOtotal3 ~ AGE3 + Gender1 + NVIQSS + WordSpan, data = P1)
+summary(model_b)
+
+model_c <- lm(EMOtotal3 ~ AGE3 +  NVIQSS + WordSpan + Intervention, data = P1)
+summary(model_c)
+```
+
