@@ -25,7 +25,6 @@ P1 <- read_excel("NIH P1 Emotion Understanding SDS300.xlsx")
 names(P1)<-str_replace_all(names(P1), c(" " = "" )) 
 P1<- P1 %>%
   mutate(IGroup = as.factor(IGroup))
-view(P1)
 ```
 
 ```{r}
@@ -36,11 +35,38 @@ corP1 <- P1 %>%
 
 
 mcor<-round(cor(corP1),2)
+
 corP1 <- rcorr(as.matrix(corP1))
 ```
 
 ```{r}
 
 cor.plot(corP1$r)
+```
+
+Model 
+```{r}
+#cross-lagged full model 
+P1 <- P1 %>%
+  mutate(Intervention = as.factor(Intervention))
+
+model_1 <- "PLS4compraw3 ~ PLS4compraw1 + Intervention + EOWPVTraw1 + EMOtotal1
+          EOWPVTraw3 ~ EOWPVTraw1 + Intervention + PLS4compraw1 + EMOtotal1
+          EMOtotal3 ~ EMOtotal1 + Intervention + PLS4compraw1 + EOWPVTraw1"
+fit_1 = sem(model_1, data = P1)
+summary(fit_1, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE)
+```
+
+```{r}
+library(semPlot)
+semPaths(fit_1,rotation=2)
+```
+```{r}
+#only look at emotion 
+model_2 <- "EMOsit3 ~ EMOsit1 + EMOdesire1 + Intervention
+          EMOdesire3 ~ EMOsit1 + EMOdesire1 + Intervention"
+fit_2 = sem(model_2, data = P1)
+summary(fit_2, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE)
+semPaths(fit_2,rotation=2)
 ```
 
