@@ -13,3 +13,55 @@ library(tidyverse)
 library(lavaan)
 library(psych)
 ```
+
+```{r}
+P2 <- read_excel("NIH P2 Language  Reading SDS300.xlsx")
+names(P2) <- str_replace_all(names(P2), c(" " = "" )) 
+P2 <- P2 %>%
+  mutate(DELVSTrisk1 = 17 - DELVSTrisk1,
+         DELVSTrisk3 = 17 - DELVSTrisk3)
+```
+
+EDA & Regression
+```{r}
+ggplot(data = P2, aes(x=DELVSTrisk3)) + geom_histogram()
+ggplot(data = P2, aes(x=EOWPVTESS3)) + geom_histogram()
+ggplot(data = P2, aes(x=TOPLPASS3)) + geom_histogram()
+ggplot(data = P2, aes(x=WJ3LWSS5)) + geom_histogram()
+ggplot(data = P2, aes(x=WJ3PComSS5)) + geom_histogram()
+
+
+model_del <- lm(DELVSTrisk3 ~ Age3 + NVIQSS + Wspan + DELVSTrisk1 + Intervention, data = P2)
+summary(model_del)
+
+model_oword <- lm(EOWPVTESS3 ~ Age3 + NVIQSS + Wspan + EOWPVTESS1 + Intervention, data = P2)
+summary(model_oword)
+
+model_pho <- lm(TOPLPASS3 ~ Age3 + NVIQSS + Wspan + Intervention + TOPLPASS1, data = P2)
+summary(model_pho)
+
+model_w5 <- lm(WJ3LWSS5 ~ AgeW5 + NVIQSS + Wspan + Intervention , data = P2)
+summary(model_w5)
+```
+
+Check paths 
+```{r}
+model_1 <- lm(WJ3LWSS5 ~ AgeW5 + NVIQSS + Wspan + EOWPVTESS3 + DELVSTrisk3 + TOPLPASS3 + Intervention, data = P2)
+summary(model_1)
+
+model_2 <- lm(WJ3PComSS5 ~ AgeW5 + NVIQSS + Wspan + EOWPVTESS3 + DELVSTrisk3 + TOPLPASS3 + Intervention, data = P2)
+summary(model_1)
+
+#intervention not significant 
+model_3 <- lm(DELVSTrisk3 ~ Age3 + NVIQSS + Wspan + DELVSTrisk1 + Intervention, data = P2)
+summary(model_3)
+
+#intervention not significant 
+model_4 <- lm(EOWPVTESS3 ~ Age3 + NVIQSS + Wspan + EOWPVTESS1 + Intervention, data = P2) 
+summary(model_4)
+
+#intervention not significant 
+model_5 <- lm(TOPLPASS3 ~ Age3 + NVIQSS + Wspan + TOPLPASS1 + Intervention, data = P2) 
+summary(model_5)
+```
+
