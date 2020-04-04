@@ -85,16 +85,28 @@ summary(fit_3, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE)
 
 ```
 
-Regression
+Regression Wave 3
 ```{r}
 ggplot(data = P1, aes(x=EMOtotal3)) + geom_histogram()
 
-model_a <- lm(EMOtotal3 ~ AGE3, data = P1)
-summary(model_a)
-model_b <- lm(EMOtotal3 ~ AGE3 + Gender1 + NVIQSS + WordSpan, data = P1)
-summary(model_b)
+model_a3 <- lm(EMOtotal3 ~ AGE3, data = P1)
+summary(model_a3)
+model_b3 <- lm(EMOtotal3 ~ AGE3 + Gender1 + NVIQSS + WordSpan, data = P1)
+summary(model_b3)
+model_c3 <- lm(EMOtotal3 ~ AGE3 +  NVIQSS + WordSpan + Intervention, data = P1)
+summary(model_c3)
 
-model_c <- lm(EMOtotal3 ~ AGE3 +  NVIQSS + WordSpan + Intervention, data = P1)
-summary(model_c)
+
+```
+
+
+Regression Wave 1
+```{r}
+model_a1 <- lm(EMOtotal1 ~ AGE1, data = P1)
+summary(model_a1)
+model_b1 <- lm(EMOtotal1 ~ AGE1 + Gender1 + NVIQSS + WordSpan, data = P1)
+summary(model_b1)
+model_c1 <- lm(EMOtotal1 ~ AGE1 +  NVIQSS + WordSpan + Intervention, data = P1)
+summary(model_c1)
 ```
 
