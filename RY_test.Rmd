@@ -1,0 +1,60 @@
+---
+title: "RY_test"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#load package
+```{r}
+library(readxl)
+library(tidyverse)
+library(lavaan)
+library(psych)
+library(Hmisc)
+```
+
+
+#read_data
+```{r}
+P2<-read_excel("NIHP2LanguageReadingSDS300.xlsx")
+```
+
+#tidy
+```{r}
+names(P2)<-str_replace_all(names(P2), c(" " = "" )) 
+```
+
+#correlation_function
+```{r}
+#Function that helps formating  matrix
+# ++++++++++++++++++++++++++++
+# flattenCorrMatrix
+# ++++++++++++++++++++++++++++
+# cormat : matrix of the correlation coefficients
+# pmat : matrix of the correlation p-values
+flattenCorrMatrix <- function(cormat, pmat) {
+  ut <- upper.tri(cormat)
+  data.frame(
+    row = rownames(cormat)[row(cormat)[ut]],
+    column = rownames(cormat)[col(cormat)[ut]],
+    cor  =(cormat)[ut],
+    p = round(pmat[ut],2)
+    )
+}
+```
+
+
+
+#EDA
+```{r}
+corP2 <- P2 %>%
+  select(-Ethnicity,-ChildId, -Gender)
+cormatrix<-rcorr(as.matrix(corP2))
+matrixcorrelation2<-flattenCorrMatrix(cormatrix$r,cormatrix$P)
+
+```
+
+#
