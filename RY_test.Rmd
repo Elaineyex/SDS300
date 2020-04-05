@@ -14,6 +14,7 @@ library(tidyverse)
 library(lavaan)
 library(psych)
 library(Hmisc)
+library(apaTables)
 ```
 
 
@@ -51,9 +52,21 @@ flattenCorrMatrix <- function(cormat, pmat) {
 #EDA
 ```{r}
 corP2 <- P2 %>%
+  mutate(DELVSTrisk1R=17-DELVSTrisk1,DELVSTrisk3R=17-DELVSTrisk3)%>%
   select(-Ethnicity,-ChildId, -Gender)
 cormatrix<-rcorr(as.matrix(corP2))
 matrixcorrelation2<-flattenCorrMatrix(cormatrix$r,cormatrix$P)
+
+meanP2<-colMeans(corP2)
+sdP2<-apply(corP2,2,sd)
+
+
+#reverse Delvrisk
+#write sd,m into a table
+#put correlation, sd, M in a table--> Descriptive Table
+
+
+apa.cor.table(corP2, filename="SDS300_corTable1.doc", table.number=1)
 
 ```
 
