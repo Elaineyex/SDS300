@@ -208,6 +208,16 @@ ggplot(p2, aes(x = WJ3LWSS5, fill = Intervention, color = Intervention)) +
              color = "blue", linetype = "dashed", size = 1)
 ```
 
+```{r letter-word~ethnicity}
+ggplot(p2, aes(x = WJ3LWSS5, fill = Ethnicity, color = Ethnicity)) +
+  geom_histogram(aes(y = ..density..),
+                 position = "identity",
+                 alpha = 0.5)+
+  geom_vline(xintercept = mean((p2 %>% filter(Ethnicity == "BLACK"))$WJ3LWSS5, na.rm = T),
+             color = "red", linetype = "dashed", size = 1) +
+  geom_vline(xintercept = mean((p2 %>% filter(Ethnicity == "WHITE"))$WJ3LWSS5, na.rm = T),
+             color = "blue", linetype = "dashed", size = 1)
+```
 
 ### WJIII Passage Comprehension
 ```{r passage comprehension}
@@ -221,3 +231,13 @@ ggplot(p2, aes(x = WJ3PComSS5, fill = Intervention, color = Intervention)) +
              color = "blue", linetype = "dashed", size = 1)
 ```
 
+```{r comprehension~ethnicity}
+ggplot(p2, aes(x = WJ3PComSS5, fill = Ethnicity, color = Ethnicity)) +
+  geom_histogram(aes(y = ..density..),
+                 position = "identity",
+                 alpha = 0.5)+
+  geom_vline(xintercept = mean((p2 %>% filter(Ethnicity == "BLACK"))$WJ3PComSS5, na.rm = T),
+             color = "red", linetype = "dashed", size = 1) +
+  geom_vline(xintercept = mean((p2 %>% filter(Ethnicity == "WHITE"))$WJ3PComSS5, na.rm = T),
+             color = "blue", linetype = "dashed", size = 1)
+```
