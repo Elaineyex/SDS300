@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(ggplot2)
+library(ggthemes)
 ```
 
 ## Have a look at the dataset
@@ -43,7 +44,10 @@ ethnicity_plot
 iq_plot <- ggplot(p2,aes(x = IQ)) +
   geom_histogram(breaks = seq(50, 160, by = 5)) +
   geom_vline(xintercept = mean(p2$IQ, na.rm = T),
-             color = "coral", linetype = "dashed", size = 1)
+             color = "coral", linetype = "dashed", size = 1) +
+  labs(title = "IQ Distribution",
+       caption = "The dotted line represents mean IQ.") +
+  theme_economist_white()
 iq_plot
 ```
 
@@ -66,7 +70,10 @@ ggplot(p2,aes(x = IQ, fill = Ethnicity, color = Ethnicity)) +
 wspan_plot <- ggplot(p2,aes(x = Wspan)) +
   geom_histogram(stat = "count") +
   geom_vline(xintercept = mean(p2$Wspan, na.rm = T),
-             color = "coral", linetype = "dashed", size = 1)
+             color = "coral", linetype = "dashed", size = 1) +
+  labs(title = "Verbal Memory Distribution",
+       caption = "The dotted line represents the mean score") +
+  theme_economist_white()
 wspan_plot
 ```
 
@@ -88,17 +95,22 @@ ggplot(p2,aes(x = Wspan, fill = Ethnicity, color = Ethnicity)) +
 ```{r}
 delv_data <- p2 %>%
   select(Intervention, DELVSTrisk1, DELVSTrisk3) %>%
-  pivot_longer(cols = c("DELVSTrisk1", "DELVSTrisk3"), names_to = "phase", values_to = "score") %>%
+  rename(Wave_1 = DELVSTrisk1, Wave_3 = DELVSTrisk3) %>%
+  pivot_longer(cols = c("Wave_1", "Wave_3"), names_to = "phase", values_to = "score") %>%
   mutate(phase = as.factor(phase))
 
 ggplot(delv_data, aes(x = score, fill = phase, color = phase)) +
   geom_histogram(position = "identity", breaks = seq(0, 12, by = 1.5),
                  aes(y = ..density..),
                  alpha = 0.5)+
-  geom_vline(xintercept = mean((delv_data %>% filter(phase == "DELVSTrisk1"))$score, na.rm = T),
+  geom_vline(xintercept = mean((delv_data %>% filter(phase == "Wave_1"))$score, na.rm = T),
              color = "red", linetype = "dashed", size = 1) +
-  geom_vline(xintercept = mean((delv_data %>% filter(phase == "DELVSTrisk3"))$score, na.rm = T),
-             color = "blue", linetype = "dashed", size = 1)
+  geom_vline(xintercept = mean((delv_data %>% filter(phase == "Wave_3"))$score, na.rm = T),
+             color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "DELV Screener Risk Test Distribution",
+       subtitle = "Colored by wave",
+       caption = "The dotted line represents mean scores at the two waves.") +
+  theme_economist_white()
 ```
 
 ```{r DELV diff}
@@ -121,19 +133,23 @@ ggplot(delv_data_diff, aes(x = delv_diff)) +
 ### Expressive score
 ```{r expressive}
 expressive_data <- p2 %>%
-  select(Intervention, EOWPVTESS1, EOWPVTESS3) %>%
-  pivot_longer(cols = c("EOWPVTESS1", "EOWPVTESS3"), names_to = "phase", values_to = "score") %>%
+  select(Intervention, Wave_1 = EOWPVTESS1, Wave_3 = EOWPVTESS3) %>%
+  pivot_longer(cols = c("Wave_1", "Wave_3"), names_to = "phase", values_to = "score") %>%
   mutate(phase = as.factor(phase))
 
 ggplot(expressive_data, aes(x = score, fill = phase, color = phase)) +
   geom_histogram(position = "identity",
                  aes(y = ..density..),
                  alpha = 0.5)+
-  geom_vline(xintercept = mean((expressive_data %>% filter(phase == "EOWPVTESS1"))$score, 
+  geom_vline(xintercept = mean((expressive_data %>% filter(phase == "Wave_1"))$score, 
                                na.rm = T),
              color = "red", linetype = "dashed", size = 1) +
-  geom_vline(xintercept = mean((expressive_data %>% filter(phase == "EOWPVTESS3"))$score, na.rm = T),
-             color = "blue", linetype = "dashed", size = 1)
+  geom_vline(xintercept = mean((expressive_data %>% filter(phase == "Wave_3"))$score, na.rm = T),
+             color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "Expressive One Word Picture Vocabulary \nTest Distribution",
+       subtitle = "Colored by wave",
+       caption = "The dotted line represents mean scores at the two waves.") +
+  theme_economist_white()
 ```
 
 ```{r expressive diff}
@@ -155,19 +171,23 @@ ggplot(expressive_data_diff, aes(x = expressive_diff)) +
 
 ```{r pa}
 pa_data <- p2 %>%
-  select(Intervention, TOPLPASS1, TOPLPASS3) %>%
-  pivot_longer(cols = c("TOPLPASS1", "TOPLPASS3"), names_to = "phase", values_to = "score") %>%
+  select(Intervention, Wave_1 = TOPLPASS1, Wave_3 = TOPLPASS3) %>%
+  pivot_longer(cols = c("Wave_1", "Wave_3"), names_to = "phase", values_to = "score") %>%
   mutate(phase = as.factor(phase))
 
 ggplot(expressive_data, aes(x = score, fill = phase, color = phase)) +
   geom_histogram(position = "identity",
                  aes(y = ..density..),
                  alpha = 0.5)+
-  geom_vline(xintercept = mean((pa_data %>% filter(phase == "TOPLPASS1"))$score, 
+  geom_vline(xintercept = mean((pa_data %>% filter(phase == "Wave_1"))$score, 
                                na.rm = T),
              color = "red", linetype = "dashed", size = 1) +
-  geom_vline(xintercept = mean((pa_data %>% filter(phase == "TOPLPASS3"))$score, na.rm = T),
-             color = "blue", linetype = "dashed", size = 1)
+  geom_vline(xintercept = mean((pa_data %>% filter(phase == "Wave_3"))$score, na.rm = T),
+             color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "TOPEL Phonological Awareness Test Distribution",
+       subtitle = "Colored by wave",
+       caption = "The dotted line represents mean scores at the two waves.") +
+  theme_economist_white()
 ```
 
 ```{r pa diff}
@@ -205,7 +225,12 @@ ggplot(p2, aes(x = WJ3LWSS5, fill = Intervention, color = Intervention)) +
   geom_vline(xintercept = mean((p2 %>% filter(Intervention == "0"))$WJ3LWSS5, na.rm = T),
              color = "red", linetype = "dashed", size = 1) +
   geom_vline(xintercept = mean((p2 %>% filter(Intervention == "1"))$WJ3LWSS5, na.rm = T),
-             color = "blue", linetype = "dashed", size = 1)
+             color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "Woodcock Johnson III Letter-Word \nIdentification Test Distribution",
+       subtitle = "Colored by Intervention / No Intervention",
+       x = "score",
+       caption = "The dotted line represents mean scores w/ or w/o intervention.") +
+  theme_economist_white()
 ```
 
 ```{r letter-word~ethnicity}
@@ -216,7 +241,12 @@ ggplot(p2, aes(x = WJ3LWSS5, fill = Ethnicity, color = Ethnicity)) +
   geom_vline(xintercept = mean((p2 %>% filter(Ethnicity == "BLACK"))$WJ3LWSS5, na.rm = T),
              color = "red", linetype = "dashed", size = 1) +
   geom_vline(xintercept = mean((p2 %>% filter(Ethnicity == "WHITE"))$WJ3LWSS5, na.rm = T),
-             color = "blue", linetype = "dashed", size = 1)
+             color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "Woodcock Johnson III Letter-Word \nIdentification Test Distribution",
+       subtitle = "Colored by Ethnicity",
+       x = "score",
+       caption = "The dotted line represents mean scores for black/white children.") +
+  theme_economist_white()
 ```
 
 ### WJIII Passage Comprehension
@@ -228,7 +258,12 @@ ggplot(p2, aes(x = WJ3PComSS5, fill = Intervention, color = Intervention)) +
   geom_vline(xintercept = mean((p2 %>% filter(Intervention == "0"))$WJ3PComSS5, na.rm = T),
              color = "red", linetype = "dashed", size = 1) +
   geom_vline(xintercept = mean((p2 %>% filter(Intervention == "1"))$WJ3PComSS5, na.rm = T),
-             color = "blue", linetype = "dashed", size = 1)
+             color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "WJIII Passage Comprehesion Test Distribution",
+       subtitle = "Colored by Intervention / No Intervention",
+       x = "score",
+       caption = "The dotted line represents mean scores w/ or w/o intervention.") +
+  theme_economist_white()
 ```
 
 ```{r comprehension~ethnicity}
@@ -239,5 +274,22 @@ ggplot(p2, aes(x = WJ3PComSS5, fill = Ethnicity, color = Ethnicity)) +
   geom_vline(xintercept = mean((p2 %>% filter(Ethnicity == "BLACK"))$WJ3PComSS5, na.rm = T),
              color = "red", linetype = "dashed", size = 1) +
   geom_vline(xintercept = mean((p2 %>% filter(Ethnicity == "WHITE"))$WJ3PComSS5, na.rm = T),
-             color = "blue", linetype = "dashed", size = 1)
+             color = "blue", linetype = "dashed", size = 1) +
+labs(title = "WJIII Passage Comprehesion Test Distribution",
+       subtitle = "Colored by Ethnicity",
+       x = "score",
+       caption = "The dotted line represents mean scores for black/white children.") +
+  theme_economist_white()
 ```
+
+
+## repeated ANOVA trial
+```{r}
+anova_data <- p2 %>%
+  select(Intervention, wave_1 = DELVSTrisk1, wave_3 = DELVSTrisk3) %>%
+  mutate(diff_DELV = wave_3 - wave_1)
+
+m1<-lm(diff_DELV~Intervention, data = anova_data)
+summary(aov(m1))
+```
+
