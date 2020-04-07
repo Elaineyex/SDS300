@@ -17,11 +17,6 @@ names(P2) <- str_replace_all(names(P2), c(" " = "" ))
 P2 <- P2 %>%
   mutate(DELVSTrisk1 = 17 - DELVSTrisk1,
          DELVSTrisk3 = 17 - DELVSTrisk3)
-
-P2_diff <- P2 %>%
-  mutate(DELV_diff = DELVSTrisk3 - DELVSTrisk1,
-         EOWPVTE_diff = EOWPVTESS3 - EOWPVTESS1,
-         TPOLPA_diff = TOPLPASS3 - TOPLPASS1)
 ```
 
 
