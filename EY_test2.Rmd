@@ -22,6 +22,13 @@ P2 <- P2 %>%
 
 
 EDA & Regression
+
+```{r}
+P2 %>%
+  group_by(Ethnicity) %>%
+  summarize(n=n())
+```
+
 ```{r}
 ggplot(data = P2, aes(x=DELVSTrisk3)) + geom_histogram()
 ggplot(data = P2, aes(x=EOWPVTESS3)) + geom_histogram()
@@ -55,16 +62,16 @@ summary(model_2)
 
 
 #intervention not significant 
-model_3 <- lm(DELVSTrisk3 ~ Age3 + NVIQSS + Wspan + DELVSTrisk1 + Intervention, data = P2)
+model_3 <- lm(DELVSTrisk3 ~ Age3 + NVIQSS + Wspan + DELVSTrisk1 + Intervention + Ethnicity, data = P2)
 summary(model_3)
 
 #intervention not significant 
-model_4 <- lm(EOWPVTESS3 ~ Age3 + NVIQSS + Wspan + EOWPVTESS1 + Intervention, data = P2) 
+model_4 <- lm(EOWPVTESS3 ~ Age3 + NVIQSS + Wspan + EOWPVTESS1 + Intervention + Ethnicity, data = P2) 
 summary(model_4)
 
 #intervention not significant 
-model_5 <- lm(TOPLPASS3 ~ Age3 + NVIQSS + Wspan + TOPLPASS1 + Intervention, data = P2) 
-summary(model_5)
+model_5 <- lm(TOPLPASS3 ~ Age3 + NVIQSS + Wspan + TOPLPASS1 + Intervention + Ethnici, data = P2) 
+summary(model_5) 
 ```
 
 ```{r}
@@ -89,13 +96,28 @@ summary(model_2)
 
 ```{r}
 SEM_1 <- "EOWPVTESS3 ~ EOWPVTESS1 + Intervention + Age3 + Wspan + NVIQSS 
-          DELVSTrisk3 ~ DELVSTrisk1 + Intervention + Age3 + Wspan + NVIQSS
+          DELVSTrisk3 ~ DELVSTrisk1 + Intervention + Age3 + Wspan + NVIQSS  
           TOPLPASS3 ~  TOPLPASS1 + Intervention + Age3 + Wspan + NVIQSS 
-          WJ3PComSS5 ~ AgeW5 + EOWPVTESS3 + DELVSTrisk3 + TOPLPASS3 + Intervention + Wspan + NVIQSS"
+          WJ3PComSS5 ~ AgeW5 + EOWPVTESS3 + DELVSTrisk3 + TOPLPASS3 + Intervention + Wspan + NVIQSS
+          WJ3LWSS5 ~ AgeW5 + EOWPVTESS3 + DELVSTrisk3 + TOPLPASS3 + Intervention + Wspan + NVIQSS"
 fit_1 = sem(SEM_1, data = P2)
 summary(fit_1, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE)
 library(semPlot)
 semPaths(fit_1,rotation=2)
 ```
 
+```{r}
+SEM_2 <- "EOWPVTESS1 ~ Age1 + Wspan + NVIQSS 
+          DELVSTrisk1 ~ Age1 + Wspan + NVIQSS 
+          TOPLPASS1 ~ Age1 + Wspan + NVIQSS  
+          EOWPVTESS3 ~ EOWPVTESS1 + Intervention + Age3  + DELVSTrisk1 + TOPLPASS1
+          DELVSTrisk3 ~ DELVSTrisk1 + Intervention + Age3  + EOWPVTESS1 + TOPLPASS1
+          TOPLPASS3 ~  TOPLPASS1 + Intervention + Age3  + DELVSTrisk1 + EOWPVTESS1
+          WJ3PComSS5 ~ AgeW5 + EOWPVTESS3 + DELVSTrisk3 + TOPLPASS3 + Intervention 
+          WJ3LWSS5 ~ AgeW5 + EOWPVTESS3 + DELVSTrisk3 + TOPLPASS3 + Intervention "
+fit_2 = sem(SEM_2, data = P2)
+summary(fit_2, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE)
+library(semPlot)
+semPaths(fit_2,rotation=2)
+```
 
