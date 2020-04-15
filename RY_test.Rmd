@@ -15,6 +15,8 @@ library(lavaan)
 library(psych)
 library(Hmisc)
 library(apaTables)
+install.packages("ggpubr")
+library(ggpubr)
 ```
 
 
@@ -70,4 +72,151 @@ apa.cor.table(corP2, filename="SDS300_corTable1.doc", table.number=1)
 
 ```
 
-#
+#1-way anova
+```{r}
+AnovaP2 <- P2 %>%
+  mutate(DELVSTrisk1R=17-DELVSTrisk1,DELVSTrisk3R=17-DELVSTrisk3)
+
+#1 #everythings significant except for IQ
+aov1<-aov(WJ3LWSS5~as.factor(Ethnicity),AnovaP2)
+summary(aov1)
+
+aov2<-aov(WJ3PComSS5~as.factor(Ethnicity),AnovaP2)
+summary(aov2)
+
+aov3<-aov(EOWPVTESS1~as.factor(Ethnicity),AnovaP2)
+summary(aov3)
+
+aov4<-aov(TOPLPASS1~as.factor(Ethnicity),AnovaP2)
+summary(aov4)
+
+aov5<-aov(EOWPVTESS3~as.factor(Ethnicity),AnovaP2)
+summary(aov5)
+
+aov6<-aov(TOPLPASS3~as.factor(Ethnicity),AnovaP2)
+summary(aov6)
+
+aov7<-aov(NVIQSS~as.factor(Ethnicity),AnovaP2)
+summary(aov7)
+
+aov8<-aov(Wspan~as.factor(Ethnicity),AnovaP2)
+summary(aov8)
+
+#Gender
+aovG1<-aov(WJ3LWSS5~as.factor(Gender),AnovaP2)
+summary(aovG1)
+#significant
+
+aovG2<-aov(WJ3PComSS5~as.factor(Gender),AnovaP2)
+summary(aovG2)
+
+aovG3<-aov(EOWPVTESS1~as.factor(Gender),AnovaP2)
+summary(aovG3)
+
+aovG4<-aov(TOPLPASS1~as.factor(Gender),AnovaP2)
+summary(aovG4) #significant
+
+aovG5<-aov(EOWPVTESS3~as.factor(Gender),AnovaP2)
+summary(aovG5)
+
+aovG6<-aov(TOPLPASS3~as.factor(Gender),AnovaP2)
+summary(aovG6)
+
+aovG7<-aov(NVIQSS~as.factor(Gender),AnovaP2)
+summary(aovG7)
+
+aovG8<-aov(Wspan~as.factor(Gender),AnovaP2)
+summary(aovG8)
+
+#intervention
+aovIn1<-aov(WJ3LWSS5~as.factor(Intervention),AnovaP2)
+summary(aovIn1)
+
+aovIn2<-aov(WJ3PComSS5~as.factor(Intervention),AnovaP2)
+summary(aovIn2) #significant
+
+aovIn3<-aov(EOWPVTESS1~as.factor(Intervention),AnovaP2)
+summary(aovIn3)
+
+aovIn4<-aov(TOPLPASS1~as.factor(Intervention),AnovaP2)
+summary(aovIn4) #significant
+
+aovIn5<-aov(EOWPVTESS3~as.factor(Intervention),AnovaP2)
+summary(aovIn5)
+
+aovIn6<-aov(TOPLPASS3~as.factor(Intervention),AnovaP2)
+summary(aovIn6)
+
+aovIn7<-aov(NVIQSS~as.factor(Intervention),AnovaP2)
+summary(aovIn7)
+wwe
+aovIn8<-aov(Wspan~as.factor(Intervention),AnovaP2)
+summary(aovIn8)
+
+
+
+```
+
+#2-way anova
+```{r}
+AOVthreeway1<-aov(WJ3LWSS5~as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway1)
+#gender,ethinicity
+
+
+AOVthreeway1<-aov(DELVSTrisk3~as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway1)
+
+
+apa.aov.table(AOVthreeway1, filename="SDS300_anovaTable1.3.doc", table.number=2)
+
+AOVthreeway2<-aov(WJ3PComSS5~as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway2)
+
+apa.aov.table(AOVthreeway2, filename="SDS300_anovaTable1.5.doc", table.number=2)
+
+
+#Graph: 
+
+AnovaP2 %>% 
+  ggplot(aes(x=as.factor(Ethnicity), y=WJ3PComSS5))  + 
+  geom_boxplot()+
+  facet_wrap(~Intervention)+
+  
+
+bxp <- ggboxplot(
+  AnovaP2, x ="Ethnicity", y = "WJ3PComSS5", facet.by = "Intervention"
+  )
+
+AOVthreeway3<-aov(EOWPVTESS1~as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway3)
+apa.aov.table(AOVthreeway3, filename="SDS300_anovaTable3.doc", table.number=2)
+
+AOVthreeway4<-aov(TOPLPASS1~as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway4)
+
+apa.aov.table(AOVthreeway4, filename="SDS300_anovaTable4.doc", table.number=2)
+#a
+
+
+
+AOVthreeway5<-aov(EOWPVTESS3~as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway5)
+apa.aov.table(AOVthreeway5, filename="SDS300_anovaTable5.doc", table.number=2)
+
+AOVthreeway6<-aov(TOPLPASS3~as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway6)
+apa.aov.table(AOVthreeway6, filename="SDS300_anovaTable6.doc", table.number=2)
+
+AOVthreeway7<-aov(NVIQSS~1+as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway7)
+
+apa.aov.table(AOVthreeway7, filename="SDS300_anovaTable7.doc", table.number=2)
+
+AOVthreeway8<-aov(Wspan~as.factor(Ethnicity)+as.factor(Intervention),AnovaP2)
+summary(AOVthreeway8)
+apa.aov.table(AOVthreeway8, filename="SDS300_anovaTable8.doc", table.number=2)
+#ethnicity
+
+```
+

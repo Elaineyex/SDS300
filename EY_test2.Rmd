@@ -12,7 +12,7 @@ library(psych)
 ```
 
 ```{r}
-P2 <- read_excel("NIH P2 Language  Reading SDS300.xlsx")
+P2 <- read_excel("NIHP2LanguageReadingSDS300.xlsx")
 names(P2) <- str_replace_all(names(P2), c(" " = "" )) 
 P2 <- P2 %>%
   mutate(DELVSTrisk1 = 17 - DELVSTrisk1,
