@@ -119,7 +119,9 @@ SEM_2 <- "EOWPVTESS1 ~  Age1 + Wspan + NVIQSS
 
 #Covariance
 EOWPVTESS1~~DELVSTrisk1+TOPLPASS1
-EOWPVTESS3~~DELVSTrisk3+TOPLPASS3"
+DELVSTrisk1~~TOPLPASS1
+EOWPVTESS3~~DELVSTrisk3+TOPLPASS3
+DELVSTrisk3~~TOPLPASS3"
 
 fit_2 = sem(SEM_2, data = P2)
 summary(fit_2, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE)
